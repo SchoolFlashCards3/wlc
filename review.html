@@ -403,15 +403,15 @@
 <body>
     <div class="review-form">
         <h2 class="form-title">Leave a Review</h2>
-        <form id="lawnReviewForm">
+        <form id="lawnReviewForm" action="mailto:your-email@example.com" method="post" enctype="text/plain">
             <div class="form-group">
                 <label for="customerName">Your Name</label>
-                <input type="text" id="customerName" name="customerName" required>
+                <input type="text" id="customerName" name="name" required>
             </div>
             
             <div class="form-group">
                 <label for="customerEmail">Email Address</label>
-                <input type="email" id="customerEmail" name="customerEmail" required>
+                <input type="email" id="customerEmail" name="email" required>
             </div>
             
             <div class="form-group">
@@ -423,12 +423,12 @@
                     <i class="far fa-star rating-star" data-value="4"></i>
                     <i class="far fa-star rating-star" data-value="5"></i>
                 </div>
-                <input type="hidden" id="serviceRating" name="serviceRating" value="0">
+                <input type="hidden" id="serviceRating" name="rating" value="0">
             </div>
             
             <div class="form-group">
                 <label for="serviceType">Service Type</label>
-                <select id="serviceType" name="serviceType" required>
+                <select id="serviceType" name="service" required>
                     <option value="">Select a service</option>
                     <option value="mowing">Lawn Mowing</option>
                     <option value="seasonalcleanup">Seasonal Cleanup</option>
@@ -440,7 +440,7 @@
             
             <div class="form-group">
                 <label for="reviewText">Your Review</label>
-                <textarea id="reviewText" name="reviewText" placeholder="Tell us about your experience..." required></textarea>
+                <textarea id="reviewText" name="review" placeholder="Tell us about your experience..." required></textarea>
             </div>
             
             <button type="submit" class="submit-btn">Submit Review</button>
@@ -492,36 +492,15 @@
             
             // Form submission
             form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
                 // Validate rating
                 if (ratingInput.value === '0') {
+                    e.preventDefault();
                     alert('Please select a rating');
                     return;
                 }
                 
-                // Get form data
-                const formData = {
-                    name: document.getElementById('customerName').value,
-                    email: document.getElementById('customerEmail').value,
-                    rating: ratingInput.value,
-                    service: document.getElementById('serviceType').value,
-                    review: document.getElementById('reviewText').value
-                };
-                
-                // Here you would typically send the data to your server
-                console.log('Form submitted:', formData);
-                
-                // Show success message and reset form
+                // Show success message
                 successMessage.style.display = 'block';
-                form.reset();
-                ratingInput.value = '0';
-                
-                // Reset stars
-                stars.forEach(star => {
-                    star.classList.remove('fas', 'active');
-                    star.classList.add('far');
-                });
                 
                 // Hide success message after 5 seconds
                 setTimeout(() => {
@@ -530,8 +509,6 @@
             });
         });
     </script>
-</body>
-</html>
 <!--FOOTER-->
 <footer>
     <p>Willam Lawn Care | 
