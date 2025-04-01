@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Willam Lawn Care - Reviews</title>
+    <!--HEADER-->
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -311,3 +312,264 @@
             <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSe8rkZ3-3DXxb7nE7TKdJg2i6BN84DxO4eqVdKEN4WwvNv61w/viewform?usp=sharing" class="review-link" target="_blank">Leave a Review</a></li>
         </ul>
     </nav>
+<!--REVIEW-->
+    <style>
+        .review-form {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-family: Arial, sans-serif;
+        }
+        
+        .form-title {
+            text-align: center;
+            color: #2e7d32;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .rating-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 1rem 0;
+        }
+        
+        .rating-star {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .rating-star:hover,
+        .rating-star.active {
+            color: #ffb74d;
+        }
+        
+        .submit-btn {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background-color: #1b5e20;
+        }
+        
+        .success-message {
+            display: none;
+            text-align: center;
+            color: #2e7d32;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="review-form">
+        <h2 class="form-title">Leave a Review</h2>
+        <form id="lawnReviewForm">
+            <div class="form-group">
+                <label for="customerName">Your Name</label>
+                <input type="text" id="customerName" name="customerName" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="customerEmail">Email Address</label>
+                <input type="email" id="customerEmail" name="customerEmail" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Service Rating</label>
+                <div class="rating-container">
+                    <i class="far fa-star rating-star" data-value="1"></i>
+                    <i class="far fa-star rating-star" data-value="2"></i>
+                    <i class="far fa-star rating-star" data-value="3"></i>
+                    <i class="far fa-star rating-star" data-value="4"></i>
+                    <i class="far fa-star rating-star" data-value="5"></i>
+                </div>
+                <input type="hidden" id="serviceRating" name="serviceRating" value="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="serviceType">Service Type</label>
+                <select id="serviceType" name="serviceType" required>
+                    <option value="">Select a service</option>
+                    <option value="mowing">Lawn Mowing</option>
+                    <option value="fertilization">Fertilization</option>
+                    <option value="weed_control">Weed Control</option>
+                    <option value="aeration">Aeration</option>
+                    <option value="landscaping">Landscaping</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="reviewText">Your Review</label>
+                <textarea id="reviewText" name="reviewText" placeholder="Tell us about your experience..." required></textarea>
+            </div>
+            
+            <button type="submit" class="submit-btn">Submit Review</button>
+            <div id="successMessage" class="success-message">Thank you for your review!</div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.rating-star');
+            const ratingInput = document.getElementById('serviceRating');
+            const form = document.getElementById('lawnReviewForm');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Star rating functionality
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    ratingInput.value = value;
+                    
+                    stars.forEach(s => {
+                        const sValue = s.getAttribute('data-value');
+                        s.classList.toggle('active', sValue <= value);
+                        s.classList.toggle('far', sValue > value);
+                        s.classList.toggle('fas', sValue <= value);
+                    });
+                });
+                
+                star.addEventListener('mouseover', function() {
+                    const hoverValue = this.getAttribute('data-value');
+                    
+                    stars.forEach(s => {
+                        const sValue = s.getAttribute('data-value');
+                        s.classList.toggle('far', sValue > hoverValue);
+                        s.classList.toggle('fas', sValue <= hoverValue);
+                    });
+                });
+                
+                star.addEventListener('mouseout', function() {
+                    const currentValue = ratingInput.value || 0;
+                    
+                    stars.forEach(s => {
+                        const sValue = s.getAttribute('data-value');
+                        s.classList.toggle('far', sValue > currentValue);
+                        s.classList.toggle('fas', sValue <= currentValue);
+                    });
+                });
+            });
+            
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate rating
+                if (ratingInput.value === '0') {
+                    alert('Please select a rating');
+                    return;
+                }
+                
+                // Get form data
+                const formData = {
+                    name: document.getElementById('customerName').value,
+                    email: document.getElementById('customerEmail').value,
+                    rating: ratingInput.value,
+                    service: document.getElementById('serviceType').value,
+                    review: document.getElementById('reviewText').value
+                };
+                
+                // Here you would typically send the data to your server
+                console.log('Form submitted:', formData);
+                
+                // Show success message and reset form
+                successMessage.style.display = 'block';
+                form.reset();
+                ratingInput.value = '0';
+                
+                // Reset stars
+                stars.forEach(star => {
+                    star.classList.remove('fas', 'active');
+                    star.classList.add('far');
+                });
+                
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>
+<!--FOOTER-->
+<footer>
+    <p>Willam Lawn Care | 
+        <a href="admin.html" 
+           style="color: #4d8bf0; 
+                  text-decoration: none;
+                  font-weight: bold;
+                  transition: color 0.3s ease;"
+           onmouseover="this.style.color='#6ba1ff'" 
+           onmouseout="this.style.color='#4d8bf0'">
+            Admin Login
+        </a>
+    </p>
+</footer>
+
+    <script>
+        // Smooth scroll with offset for sticky nav
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                if(this.getAttribute('target') !== '_blank') {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    const headerOffset = 80;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Update URL without jumping
+                    history.pushState(null, null, targetId);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
